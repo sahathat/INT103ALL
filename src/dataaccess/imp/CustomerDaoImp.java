@@ -115,12 +115,12 @@ public class CustomerDaoImp implements CustomerDao {
             if (rs.next()) {
                 customer=customerORM(rs);
             }
-
+            return customer;
         } catch (SQLException ex) {
             Logger.getLogger(CustomerDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return customer;
+        return new Customer();
     }
 
 }

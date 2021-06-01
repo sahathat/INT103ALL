@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dataaccess.imp;
 
 import dataaccess.ProductDao;
@@ -16,11 +12,7 @@ import model.Category;
 import model.Department;
 import model.Product;
 
-/**
- *
- * @author praisan
- */
-public class ProductImp implements ProductDao {
+public class ProductDaoImp implements ProductDao {
 
     @Override
     public int insert(Product obj) {
@@ -29,20 +21,28 @@ public class ProductImp implements ProductDao {
 
     @Override
     public Product findById(int id) {
+        
         String sql = "SELECT * FROM products JOIN categories on products.product_category_id=categories.category_id JOIN departments ON categories.category_department_id=departments.department_id  WHERE products.product_id=?";
-        try ( Connection conn = DatabaseConnection.getConnection();  PreparedStatement stm = conn.prepareStatement(sql);) {
-            stm.setInt(1, id);
+        Product product = null; 
+        try(Connection conn = DatabaseConnection.getConnection(); PreparedStatement stm = conn.prepareStatement(sql)){
+            stm.setInt(1,id);
             ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                return productORM(rs);
+            
+            if(rs.next()){
+                product = productORM(rs);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(CustomerDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        return product;
+        
+    }   catch (SQLException ex) {
+            Logger.getLogger(ProductDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return null;
+        return new Product();
     }
-
+    
+//public Product(int product_id, Category category, String product_name, String product_description, double product_price, String product_image)
+//public Category(int category_id, Department department, String category_name)
+//public Department(int department_id, String department_name)
+    
     private Product productORM(ResultSet rs) throws SQLException {
 
         return new Product(
@@ -60,5 +60,9 @@ public class ProductImp implements ProductDao {
                 rs.getDouble("product_price"),
                 rs.getString("product_image")
         );
+    }
+    
+    private static void testProductDaoImp(){
+        System.out.println(new ProductDaoImp().findById(1).toString());
     }
 }

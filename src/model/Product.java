@@ -19,6 +19,10 @@ public class Product {
         this.product_image = product_image;
     }
 
+    public Product() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getProduct_id() {
         return product_id;
     }
